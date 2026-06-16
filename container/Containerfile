@@ -132,15 +132,6 @@ RUN --mount=type=secret,id=prerelease_creds set -ex && \
 
 
 # Copr repos
-# scikit for mgr-diskprediction-local
-# ref: https://github.com/ceph/ceph-container/pull/1821
-RUN set -euo pipefail; \
-    source /etc/ceph-distro.env; \
-    if [ "$MAJOR" -le 9 ]; then \
-        dnf install -y --setopt=install_weak_deps=False dnf-plugins-core && \
-        dnf copr enable -y tchaikov/python-scikit-learn; \
-    fi
-
 # Update package mgr
 RUN dnf update -y --setopt=install_weak_deps=False
 
@@ -158,7 +149,6 @@ ceph-immutable-object-cache \
 ceph-mds \
 ceph-mgr-cephadm \
 ceph-mgr-dashboard \
-ceph-mgr-diskprediction-local \
 ceph-mgr-k8sevents \
 ceph-mgr-modules-core \
 ceph-mgr-modules-standard \
@@ -215,9 +205,6 @@ RUN echo "systemd-udev" >> packages.txt
 # TODO: remove sg3_utils once they are moved to ceph.spec.in with libstoragemgmt
 #       ref: https://github.com/ceph/ceph-container/pull/2013#issuecomment-1248606472
 RUN echo "gdisk hostname procps-ng sg3_utils e2fsprogs lvm2 gcc" >> packages.txt
-
-# scikit
-RUN echo "python3-scikit-learn" >> packages.txt
 
 # ceph-node-proxy
 RUN echo "ceph-node-proxy" >> packages.txt
